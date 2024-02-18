@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  Platform,
-  ViewStyle,
-} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet, Platform} from 'react-native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
@@ -22,6 +15,7 @@ import {FeedScreen, HomeScreen, RewardScreen, ProfileScreen} from '../screen';
 
 // Screen
 import {LoginScreen} from '../screen/Login';
+import {SplashScreen} from '../screen/SplashScreen';
 
 // Icon
 import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
@@ -134,9 +128,10 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    initialRouteName={'LoginScreen'}>
+    initialRouteName={'SplashScreen'}>
     <RootStack.Screen name="MainTab" component={TabScreen} />
     <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+    <RootStack.Screen name="SplashScreen" component={SplashScreen} />
   </RootStack.Navigator>
 );
 

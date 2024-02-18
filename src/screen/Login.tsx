@@ -27,8 +27,8 @@ export const LoginScreen: React.FC = () => {
   const [focusInput, setFocusInput] = useState<'email' | 'password' | null>(
     null,
   );
-  const [inputValue, setInputValue] = useState<string>('');
-  const [passValue, setPassValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>('operator@colliers.com');
+  const [passValue, setPassValue] = useState<string>('operator2022');
 
   useEffect(() => {
     if (loginSuccess) {
@@ -37,13 +37,10 @@ export const LoginScreen: React.FC = () => {
   }, [loginSuccess]);
 
   const handleOnLogin = () => {
-    onLoginUser(
-      {
-        user: inputValue,
-        password: passValue,
-      },
-      'email',
-    );
+    onLoginUser({
+      username: inputValue,
+      password: passValue,
+    });
   };
 
   const handleFocusInput = (focus: 'email' | 'password' | null) => {
@@ -100,7 +97,11 @@ export const LoginScreen: React.FC = () => {
             />
             <Gap height={12} />
           </View>
-
+          {isError && (
+            <Text style={{color: color.Error[500], fontSize: mvs(16)}}>
+              Wrong Pass Dude
+            </Text>
+          )}
           <Gap height={16} />
           <Button
             label={'Submit'}

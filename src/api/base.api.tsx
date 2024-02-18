@@ -1,33 +1,84 @@
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
+import config from 'react-native-ultimate-config';
+import {storage} from '../hooks/use-storage.hook';
 import {getAccessToken} from '../service/refreshToken';
 
-// Define the base URL of your API
-const BASE_URL = 'https://employee-api-kappa.vercel.app'; // Replace with your actual API base URL
+type SsuAPIParams = {
+  cookie?: string;
+};
 
-// Initialize AxiosInstance with base configuration
-let API: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    // You can add more default headers here if needed
-  },
-});
+let API: AxiosInstance;
 
-// Optionally, if you need to handle global request or response interceptors, you can add them here
-// For example, logging request errors
-API.interceptors.request.use(
-  config => {
-    const token = getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+const setupAPIClient = () => {
+  API = axios.create({
+    // TODO: FIX IT LATER
+    // baseURL: `${config.BASE_API}`,
+    baseURL: `https://employee-api-kappa.vercel.app`,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+
+  API.interceptors.request.use(async request => {
+    const JSONProfile = storage.getString('profile');
+    if (JSONProfile) {
+      try {
+        const userToken = await getAccessToken();
+
+        if (userToken) {
+          request.headers!['Authorization'] = `Bearer ${userToken}`;
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  },
-);
 
-// Export the configured API instance for use in your app
-export default API;
+    return request;
+  });
+
+  API.interceptors.response.use(
+    response => {
+      return response;
+    },
+    (error: AxiosError) => {
+      if (!error.response) {
+        return;
+      } else {
+        return Promise.reject(error);
+      }
+    },
+  );
+};
+
+export const initialize = (
+  params?: SsuAPIParams,
+  anonymous?: boolean,
+): AxiosInstance => {
+  // always create new axios instance when cookie changed
+  if (params?.cookie || !API || anonymous) {
+    setupAPIClient();
+  }
+
+  const JSONProfile = storage.getString('profile');
+  let token: string | null = null;
+  if (JSONProfile) {
+    const profileObject = JSON.parse(JSONProfile);
+    token = profileObject.accessToken;
+  }
+
+  if (token) {
+    API.interceptors.request.use((config: AxiosRequestConfig) => {
+      config.headers = {
+        ...config.headers,
+      };
+      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['Corrier-Application'] = 'fans';
+      return config;
+    });
+  }
+
+  return API;
+};
+
+export default initialize;

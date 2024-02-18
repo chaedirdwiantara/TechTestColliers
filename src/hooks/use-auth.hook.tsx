@@ -9,15 +9,22 @@ export const useAuthHook = () => {
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
-  const onLoginUser = async (props: LoginPropsType, type: string) => {
+  const onLoginUser = async (props: LoginPropsType) => {
     setIsLoading(true);
     setIsError(false);
     setErrorMsg('');
     try {
       let response;
       response = await loginUser(props);
-      storage.set('profile', JSON.stringify(response));
-      setLoginSuccess(true);
+
+      // IMPROVISED ON THIS CZ OF THE LACK OF THE RESPONSE
+      if (response === 'Username or Password not known') {
+        setLoginSuccess(false);
+        setIsError(true);
+      } else {
+        storage.set('profile', JSON.stringify(response));
+        setLoginSuccess(true);
+      }
     } catch (error) {
       setIsError(true);
     } finally {
