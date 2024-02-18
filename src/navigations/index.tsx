@@ -21,7 +21,7 @@ import {normalize} from '../utils/formatter';
 import {FeedScreen, HomeScreen, RewardScreen, ProfileScreen} from '../screen';
 
 // Screen
-// import {EventScreen} from '../screen/Event';
+import {LoginScreen} from '../screen/Login';
 
 // Icon
 import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
@@ -30,6 +30,7 @@ import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
 
 export type RootStackParams = {
   SplashScreen: undefined;
+  LoginScreen: undefined;
   MainTab: undefined;
 };
 
@@ -133,9 +134,9 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    // initialRouteName={'SplashScreen'}
-  >
+    initialRouteName={'LoginScreen'}>
     <RootStack.Screen name="MainTab" component={TabScreen} />
+    <RootStack.Screen name="LoginScreen" component={LoginScreen} />
   </RootStack.Navigator>
 );
 
