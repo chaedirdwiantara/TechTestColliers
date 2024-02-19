@@ -9,6 +9,7 @@ import HomeIcon from './Home.icon';
 import LockIcon from './Lock.icon.';
 import ProfileIcon from './Profile.icon';
 import RewardsIcon from './Rewards.icon';
+import SearchIcon from './Search.icon';
 import UserIcon from './User.icon';
 export {
   ArrowLeftIcon,
@@ -21,5 +22,6 @@ export {
   LockIcon,
   ProfileIcon,
   RewardsIcon,
+  SearchIcon,
   UserIcon,
 };

@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {color} from '../theme';
 import {widthResponsive} from '../utils';
@@ -16,6 +16,7 @@ const HomeScreen = () => {
     page: 0,
     size: 15,
   });
+
   useEffect(() => {
     getListEmployee({page: meta.page, size: meta.size});
   }, []);
