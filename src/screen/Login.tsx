@@ -27,8 +27,8 @@ export const LoginScreen: React.FC = () => {
   const [focusInput, setFocusInput] = useState<'email' | 'password' | null>(
     null,
   );
-  const [inputValue, setInputValue] = useState<string>('operator@colliers.com');
-  const [passValue, setPassValue] = useState<string>('operator2022');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [passValue, setPassValue] = useState<string>('');
 
   useEffect(() => {
     if (loginSuccess) {
