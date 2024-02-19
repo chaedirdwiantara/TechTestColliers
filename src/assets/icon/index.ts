@@ -1,4 +1,5 @@
 
+import ArrowLeftIcon from './ArrowLeft.icon';
 import CloseIcon from './Close.icon';
 import ErrorIcon from './Error.icon';
 import EyeCloseIcon from './EyeClose.icon';
@@ -10,6 +11,7 @@ import ProfileIcon from './Profile.icon';
 import RewardsIcon from './Rewards.icon';
 import UserIcon from './User.icon';
 export {
+  ArrowLeftIcon,
   CloseIcon,
   ErrorIcon,
   EyeCloseIcon,

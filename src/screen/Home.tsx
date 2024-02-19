@@ -35,7 +35,6 @@ const HomeScreen = () => {
   };
 
   const handleOnPress = (index: number) => {
-    console.log('PRESSED');
     navigation.navigate('DetailEmployee', {id: index});
   };
 
