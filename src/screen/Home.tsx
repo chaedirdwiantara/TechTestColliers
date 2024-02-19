@@ -3,8 +3,14 @@ import React, {useEffect, useState} from 'react';
 import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {useListEmployeeHook} from '../hooks/use-employeeList.hook';
+import {EmployeeCard} from '../components';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../navigations';
 
 const HomeScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {listEmployee, stopPagination, getListEmployee} = useListEmployeeHook();
   const [meta, setMeta] = useState<{page: number; size: number}>({
     page: 0,
@@ -28,16 +34,19 @@ const HomeScreen = () => {
     }
   };
 
+  const handleOnPress = (index: number) => {
+    console.log('PRESSED');
+    navigation.navigate('DetailEmployee', {id: index});
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={listEmployee}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({item}) => (
-          <View style={styles.root}>
-            <Text style={styles.textStyle}>{item.first_name}</Text>
-          </View>
+        renderItem={({item, index}) => (
+          <EmployeeCard data={item} onPress={() => handleOnPress(index)} />
         )}
         onEndReached={handleEndScroll}
       />

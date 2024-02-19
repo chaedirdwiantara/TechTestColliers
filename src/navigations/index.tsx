@@ -16,6 +16,7 @@ import {FeedScreen, HomeScreen, RewardScreen, ProfileScreen} from '../screen';
 // Screen
 import {LoginScreen} from '../screen/Login';
 import {SplashScreen} from '../screen/SplashScreen';
+import DetailEmployee from '../screen/DetailEmployee';
 
 // Icon
 import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
@@ -26,6 +27,7 @@ export type RootStackParams = {
   SplashScreen: undefined;
   LoginScreen: undefined;
   MainTab: undefined;
+  DetailEmployee: {id: number};
 };
 
 export type MainTabParams = {
@@ -132,6 +134,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="MainTab" component={TabScreen} />
     <RootStack.Screen name="LoginScreen" component={LoginScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+    <RootStack.Screen name="DetailEmployee" component={DetailEmployee} />
   </RootStack.Navigator>
 );
 
