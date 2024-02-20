@@ -32,7 +32,7 @@ export const LoginScreen: React.FC = () => {
 
   useEffect(() => {
     if (loginSuccess) {
-      navigation.navigate('MainTab');
+      navigation.replace('MainTab');
     }
   }, [loginSuccess]);
 

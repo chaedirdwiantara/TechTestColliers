@@ -25,17 +25,17 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
           // 'await' waits for the promise to resolve and gets its value
           const userToken = await getAccessToken();
           if (userToken) {
-            navigation.navigate('MainTab');
+            navigation.replace('MainTab');
           } else {
-            navigation.navigate('LoginScreen');
+            navigation.replace('LoginScreen');
           }
         } catch (err) {
           console.log(err);
-          navigation.navigate('LoginScreen');
+          navigation.replace('LoginScreen');
         }
       } else {
-        // If there's no JSONProfile, navigate to the LoginScreen directly
-        navigation.navigate('LoginScreen');
+        // If there's no JSONProfile, replace to the LoginScreen directly
+        navigation.replace('LoginScreen');
       }
     };
 
