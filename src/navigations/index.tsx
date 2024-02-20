@@ -11,7 +11,7 @@ import {color, font} from '../theme';
 import {normalize} from '../utils/formatter';
 
 // Main
-import {FeedScreen, HomeScreen, RewardScreen, ProfileScreen} from '../screen';
+import {FeedScreen, HomeScreen, AddEmployee} from '../screen';
 
 // Screen
 import {LoginScreen} from '../screen/Login';
@@ -19,7 +19,7 @@ import {SplashScreen} from '../screen/SplashScreen';
 import DetailEmployee from '../screen/DetailEmployee';
 
 // Icon
-import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
+import {FeedIcon, HomeIcon, ProfileIcon, SearchIcon} from '../assets/icon';
 
 // interface
 
@@ -33,11 +33,7 @@ export type RootStackParams = {
 export type MainTabParams = {
   Feed: undefined;
   Home: undefined;
-  Rewards: undefined;
-  Profile: {
-    showToast?: boolean;
-    deletePlaylist?: boolean;
-  };
+  AddEmployee: undefined;
 };
 
 const screenOption: NativeStackNavigationOptions = {
@@ -56,8 +52,8 @@ const TabScreen = () => {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
-          paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-          height: Platform.OS === 'ios' ? 84 : 64,
+          paddingBottom: 0,
+          height: Platform.OS === 'ios' ? 60 : 64,
           backgroundColor: '#0F1319',
           borderTopColor: color.Dark[800],
         },
@@ -82,42 +78,22 @@ const TabScreen = () => {
         options={{
           tabBarIcon: ({color}) => (
             <View style={styles.root}>
-              <FeedIcon stroke={color} />
-              <Text style={[styles.label, {color}]}>{'Feed'}</Text>
+              <SearchIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Search'}</Text>
             </View>
           ),
         }}
       />
       <MainTab.Screen
-        name="Rewards"
-        component={RewardScreen}
+        name="AddEmployee"
+        component={AddEmployee}
         options={{
           tabBarIcon: ({color}) => (
             <TouchableOpacity
               style={styles.root}
-              onPress={() => navigation.navigate('Rewards')}>
-              <RewardsIcon stroke={color} />
-              <Text style={[styles.label, {color}]}>{'Rewards'}</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        initialParams={{showToast: false, deletePlaylist: false}}
-        options={{
-          tabBarIcon: ({color}) => (
-            <TouchableOpacity
-              style={styles.root}
-              onPress={() =>
-                navigation.navigate('Profile', {
-                  showToast: false,
-                  deletePlaylist: false,
-                })
-              }>
+              onPress={() => navigation.navigate('AddEmployee')}>
               <ProfileIcon stroke={color} />
-              <Text style={[styles.label, {color}]}>{'Profile'}</Text>
+              <Text style={[styles.label, {color}]}>{'Add Employee'}</Text>
             </TouchableOpacity>
           ),
         }}

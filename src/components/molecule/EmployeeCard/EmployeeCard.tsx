@@ -7,15 +7,21 @@ import {widthResponsive} from '../../../utils';
 interface EmployeeCardProps {
   data: eployeeList;
   onPress: () => void;
+  disabled?: boolean;
 }
 
 const EmployeeCard: React.FC<EmployeeCardProps> = (
   props: EmployeeCardProps,
 ) => {
-  const {data, onPress} = props;
+  const {data, onPress, disabled = false} = props;
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Text style={styles.textStyle}>{data.first_name}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.container}
+      disabled={disabled}>
+      <Text style={styles.textStyle} numberOfLines={1}>
+        {data.first_name} {data.last_name}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -29,6 +35,8 @@ const styles = StyleSheet.create({
     borderColor: color.Pink[200],
     borderRadius: 10,
     marginBottom: widthResponsive(10),
+    marginHorizontal: widthResponsive(10),
+    width: widthResponsive(140),
   },
   textStyle: {
     color: color.Neutral[10],

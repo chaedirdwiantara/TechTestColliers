@@ -1,8 +1,7 @@
 import FeedScreen from "./Feed";
 import HomeScreen from "./Home";
-import RewardScreen from "./Reward";
-import ProfileScreen from "./Profile";
+import AddEmployee from "./AddEmployee";
 
 export {
-    HomeScreen,FeedScreen,RewardScreen,ProfileScreen
+    HomeScreen,FeedScreen,AddEmployee
 }

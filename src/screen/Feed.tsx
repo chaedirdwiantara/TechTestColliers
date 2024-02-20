@@ -17,7 +17,7 @@ const FeedScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{color: 'white'}}>FeedScreen</Text>
+      <Text style={{color: 'white'}}>Search Employee</Text>
       <Gap height={16} />
       <SearchBar
         value={state}

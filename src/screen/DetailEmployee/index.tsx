@@ -1,4 +1,10 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import {color} from '../../theme';
 import {widthResponsive} from '../../utils';
@@ -10,7 +16,7 @@ import {
 import {RootStackParams} from '../../navigations';
 import {useDetailEmployeeHook} from '../../hooks/use-detailEmployee.hook';
 import {mvs} from 'react-native-size-matters';
-import {TopNavigation} from '../../components';
+import {DetailCard, LoadingIndicator, TopNavigation} from '../../components';
 
 type PostDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -20,13 +26,15 @@ type PostDetailProps = NativeStackScreenProps<
 const DetailEmployee = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataEmployee, getDetailEmployee} = useDetailEmployeeHook();
+  const {isLoading, isError, dataEmployee, getDetailEmployee, setDataEmployee} =
+    useDetailEmployeeHook();
   useEffect(() => {
     getDetailEmployee({id: route.params.id});
   }, []);
 
   const leftIconOnPress = () => {
     navigation.goBack();
+    setDataEmployee(undefined);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -35,11 +43,29 @@ const DetailEmployee = ({route}: PostDetailProps) => {
         leftIconAction={leftIconOnPress}
         itemStrokeColor={color.Neutral[10]}
       />
-      <View style={styles.bodyContainer}>
-        <Text style={styles.textStyle}>
-          {dataEmployee?.first_name} {dataEmployee?.last_name}
-        </Text>
-      </View>
+      {dataEmployee && (
+        <View style={styles.bodyContainer}>
+          <DetailCard
+            title={'Full Name'}
+            value={`${dataEmployee?.first_name} ${dataEmployee?.last_name}`}
+          />
+          <DetailCard
+            title={'Company Name'}
+            value={`${dataEmployee?.company_name}`}
+          />
+          <DetailCard
+            title={'City'}
+            value={`${dataEmployee?.city}, ${dataEmployee?.state}, ${dataEmployee?.county}`}
+          />
+          <DetailCard title={'Address'} value={`${dataEmployee?.address}`} />
+          <DetailCard title={'Email'} value={`${dataEmployee?.email}`} />
+          <DetailCard
+            title={'Phone Number'}
+            value={`${dataEmployee?.phone1}`}
+          />
+        </View>
+      )}
+      {isLoading && <LoadingIndicator />}
     </SafeAreaView>
   );
 };

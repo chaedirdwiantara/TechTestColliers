@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -12,8 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {color, font} from '../theme';
 import {normalize, widthResponsive} from '../utils';
 import {ms, mvs} from 'react-native-size-matters';
-import {Button, Gap, InputText} from '../components';
-import {LockIcon, UserIcon} from '../assets/icon';
+import {Button, Gap, InputText, TopNavigation} from '../components';
 import {useCreateEmployeeHook} from '../hooks/use-createEmployee.hook';
 import {createEmplyeeProps} from '../interface/createEmployee.interface';
 
@@ -32,7 +30,7 @@ type InputField =
   | 'web'
   | null;
 
-const RewardScreen = () => {
+const AddEmployee = () => {
   const {createSuccess, isLoading, isError, setIsError, onSubmitEmployee} =
     useCreateEmployeeHook();
 
@@ -80,9 +78,10 @@ const RewardScreen = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleStyle}>{'Sign In'}</Text>
-        </View>
+        <TopNavigation.Type2
+          title="Add Employee"
+          itemStrokeColor={color.Neutral[10]}
+        />
         {createSuccess && (
           <View>
             <Text style={styles.succesStyle}>Success Submit The Employee</Text>
@@ -305,7 +304,7 @@ const RewardScreen = () => {
   );
 };
 
-export default RewardScreen;
+export default AddEmployee;
 
 const styles = StyleSheet.create({
   container: {

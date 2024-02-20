@@ -5,8 +5,11 @@ import {eployeeList} from '../interface/employeeList.interface';
 export const useListEmployeeHook = () => {
   const [listEmployee, setListEmployee] = useState<eployeeList[]>([]);
   const [stopPagination, setStopPagination] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const getListEmployee = async (props: {page: number; size: number}) => {
+    setIsLoading(true);
     try {
       const response = await getListEmployeeEP({
         page: props.page,
@@ -25,10 +28,13 @@ export const useListEmployeeHook = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
+    isLoading,
     listEmployee,
     stopPagination,
     getListEmployee,
