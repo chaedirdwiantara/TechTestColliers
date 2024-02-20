@@ -8,7 +8,11 @@ export const useListEmployeeHook = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const getListEmployee = async (props: {page: number; size: number}) => {
+  const getListEmployee = async (props: {
+    page: number;
+    size: number;
+    refresh?: boolean;
+  }) => {
     setIsLoading(true);
     try {
       const response = await getListEmployeeEP({
@@ -22,8 +26,12 @@ export const useListEmployeeHook = () => {
         setListEmployee(response);
       } else {
         if (listEmployee.length > 0 && response) {
-          const updateList = listEmployee.concat(response);
-          setListEmployee(updateList);
+          if (props.refresh) {
+            setListEmployee(response);
+          } else {
+            const updateList = listEmployee.concat(response);
+            setListEmployee(updateList);
+          }
         }
       }
     } catch (err) {

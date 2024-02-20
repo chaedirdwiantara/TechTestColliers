@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -29,13 +30,26 @@ const HomeScreen = () => {
     page: 0,
     size: 15,
   });
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    getListEmployee({page: meta.page, size: meta.size});
+    getListEmployee({page: meta.page, size: meta.size, refresh: false});
   }, []);
 
+  useEffect(() => {
+    if (refreshing) {
+      getListEmployee({page: 0, size: meta.size, refresh: true});
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setRefreshing(false);
+    }
+  }, [isLoading]);
+
   const nextPage = () => {
-    getListEmployee({page: meta.page + 1, size: meta.size});
+    getListEmployee({page: meta.page + 1, size: meta.size, refresh: false});
     setMeta({
       ...meta,
       page: meta.page + 1,
@@ -59,6 +73,11 @@ const HomeScreen = () => {
         itemStrokeColor={color.Neutral[10]}
       />
       <View style={styles.bodyContainer}>
+        {refreshing && (
+          <View style={styles.loadingContainer}>
+            <LoadingIndicator size="small" />
+          </View>
+        )}
         <FlatList
           data={listEmployee}
           showsVerticalScrollIndicator={false}
@@ -70,6 +89,12 @@ const HomeScreen = () => {
             </View>
           )}
           onEndReached={handleEndScroll}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => setRefreshing(true)}
+            />
+          }
         />
         {isLoading && <LoadingIndicator size="small" />}
       </View>
@@ -97,5 +122,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: widthResponsive(20),
   },
 });

@@ -1,5 +1,4 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
-import config from 'react-native-ultimate-config';
 import {storage} from '../hooks/use-storage.hook';
 import {getAccessToken} from '../service/refreshToken';
 
