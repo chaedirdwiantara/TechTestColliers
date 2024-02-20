@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -7,13 +8,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {color, font} from '../theme';
 import {normalize, widthResponsive} from '../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import {Button, Gap, InputText} from '../components';
 import {LockIcon, UserIcon} from '../assets/icon';
 import {useCreateEmployeeHook} from '../hooks/use-createEmployee.hook';
+import {createEmplyeeProps} from '../interface/createEmployee.interface';
 
 type InputField =
   | 'firstName'
@@ -31,12 +33,10 @@ type InputField =
   | null;
 
 const RewardScreen = () => {
-  const {createSuccess, isLoading, isError, onSubmitEmployee} =
+  const {createSuccess, isLoading, isError, setIsError, onSubmitEmployee} =
     useCreateEmployeeHook();
-  const [inputValue, setInputValue] = useState<string>('');
-  const [passValue, setPassValue] = useState<string>('');
-  const [focusInput, setFocusInput] = useState<InputField>(null);
-  const [formValues, setFormValues] = useState({
+
+  const defaultValue = {
     first_name: '',
     last_name: '',
     company_name: '',
@@ -49,7 +49,10 @@ const RewardScreen = () => {
     phone2: '',
     email: '',
     web: '',
-  });
+  };
+  const [focusInput, setFocusInput] = useState<InputField>(null);
+  const [formValues, setFormValues] =
+    useState<createEmplyeeProps>(defaultValue);
 
   const handleFocusInput = (focus: InputField) => {
     setFocusInput(focus);
@@ -64,7 +67,15 @@ const RewardScreen = () => {
 
   const onPressCreate = () => {
     onSubmitEmployee(formValues);
+    setIsError(false);
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      setFormValues(defaultValue);
+    }
+  }, [isLoading]);
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -72,7 +83,12 @@ const RewardScreen = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleStyle}>{'Sign In'}</Text>
         </View>
-
+        {createSuccess && (
+          <View>
+            <Text style={styles.succesStyle}>Success Submit The Employee</Text>
+            <Gap height={10} />
+          </View>
+        )}
         <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
           <View>
             <InputText
@@ -188,7 +204,7 @@ const RewardScreen = () => {
             <Gap height={8} />
 
             <InputText
-              value={formValues.zip}
+              value={formValues.zip.toString()}
               onChangeText={value => handleInputChange('zip', value)}
               placeholder={'Zip..'}
               onFocus={() => {
@@ -216,6 +232,22 @@ const RewardScreen = () => {
               isError={false}
               errorMsg={''}
               isFocus={focusInput === 'phone1'}
+            />
+            <Gap height={8} />
+
+            <InputText
+              value={formValues.phone2}
+              onChangeText={value => handleInputChange('phone2', value)}
+              placeholder={'Phone 2..'}
+              onFocus={() => {
+                handleFocusInput('phone2');
+              }}
+              onBlur={() => {
+                handleFocusInput(null);
+              }}
+              isError={false}
+              errorMsg={''}
+              isFocus={focusInput === 'phone2'}
             />
             <Gap height={8} />
 
@@ -249,21 +281,24 @@ const RewardScreen = () => {
               errorMsg={''}
               isFocus={focusInput === 'web'}
             />
-            <Gap height={8} />
             <Gap height={12} />
           </View>
           {isError && (
-            <Text style={{color: color.Error[500], fontSize: mvs(16)}}>
-              Wrong Input Dude
-            </Text>
+            <>
+              <Text style={{color: color.Error[500], fontSize: mvs(16)}}>
+                Wrong Input Dude
+              </Text>
+              <Gap height={12} />
+            </>
           )}
-          <Gap height={16} />
           <Button
             label={'Submit Employee'}
             textStyles={{fontSize: mvs(14)}}
             containerStyles={{width: '100%'}}
             onPress={onPressCreate}
+            isLoading={isLoading}
           />
+          <Gap height={30} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -281,6 +316,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: widthResponsive(20),
+    marginBottom: widthResponsive(20),
   },
   titleStyle: {
     fontFamily: font.InterRegular,
@@ -349,5 +385,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: normalize(13),
     lineHeight: mvs(15),
+  },
+  succesStyle: {
+    color: color.Success[200],
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: normalize(13),
+    lineHeight: mvs(15),
+    alignSelf: 'center',
   },
 });

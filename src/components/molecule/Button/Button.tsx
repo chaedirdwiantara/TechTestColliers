@@ -6,13 +6,13 @@ import {
   ViewStyle,
   TextStyle,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
-
-import {Gap} from '../..';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {widthResponsive} from '../../../utils';
+import {color} from '../../../theme';
 
 interface ButtonProps {
   label: string;
@@ -22,6 +22,7 @@ interface ButtonProps {
   textStyles?: TextStyle | undefined;
   disabled?: boolean;
   onPress?: () => void;
+  isLoading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
@@ -33,6 +34,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     textStyles,
     disabled,
     onPress,
+    isLoading,
   } = props;
 
   const withBorder = type === 'border' && {
@@ -47,13 +49,12 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
       disabled={disabled}
       testID={'ssu-button'}
       onPress={onPress}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={[styles.labelStyle, textStyles]}>{label}</Text>
+      <View style={styles.childrenContainer}>
+        {!isLoading ? (
+          <Text style={[styles.labelStyle, textStyles]}>{label}</Text>
+        ) : (
+          <ActivityIndicator size="small" color={color.Neutral[10]} />
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -73,5 +74,10 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     color: Color.Neutral[10],
     fontFamily: Font.InterMedium,
+  },
+  childrenContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

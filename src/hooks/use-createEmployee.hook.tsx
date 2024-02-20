@@ -1,23 +1,30 @@
 import {useState} from 'react';
-import {employeeDetailIF} from '../interface/detailEmployee.interface';
-import {getDetailEmployeeEP} from '../api/detailEmployee.api';
+import {createEmplyeeProps} from '../interface/createEmployee.interface';
+import {setCreateEmployeeEP} from '../api/createEmployee.api';
 
 export const useCreateEmployeeHook = () => {
-  const [dataEmployee, setDataEmployee] = useState<employeeDetailIF>();
+  const [createSuccess, setCreateSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const getDetailEmployee = async (props: {id: number}) => {
+  const onSubmitEmployee = async (props: createEmplyeeProps) => {
+    setIsLoading(true);
     try {
-      const response = await getDetailEmployeeEP({
-        id: props.id,
-      });
-      setDataEmployee(response);
+      const response = await setCreateEmployeeEP(props);
+      setCreateSuccess(true);
     } catch (err) {
       console.log(err);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
-    dataEmployee,
-    getDetailEmployee,
+    createSuccess,
+    isLoading,
+    isError,
+    setIsError,
+    onSubmitEmployee,
   };
 };
